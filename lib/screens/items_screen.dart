@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
+import 'package:fridge_tracker/providers/search_provider.dart';
 import 'package:fridge_tracker/screens/new_item_screen.dart';
 import 'package:fridge_tracker/widgets/inventory_item.dart';
 import 'package:fridge_tracker/widgets/main_search_bar.dart';
@@ -24,7 +25,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final items = ref.watch(itemsProvider);
+    final items = ref.watch(filteredItemsProvider);
 
     Widget body = items.isEmpty
         ? const Center(
