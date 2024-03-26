@@ -33,12 +33,15 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
   Future<void> loadItems() async {
     final db = await _getDatabase();
     final itemsData = await db.query(_fridgeItemsTableName);
+    final appDir = await syspath.getApplicationDocumentsDirectory();
 
     final items = itemsData
         .map((itemData) => Item.existing(
               id: itemData['id'] as String,
               title: itemData['title'] as String,
-              image: itemData['imagePath'] != null ? File(itemData['imagePath'] as String) : null,
+              image: itemData['imagePath'] != null && (itemData['imagePath'] as String).isNotEmpty
+                  ? File(path.join('${appDir.path}/${itemData['imagePath'] as String}'))
+                  : null,
               expiryDate: DateTime.parse(itemData['expiryDate'] as String),
             ))
         .toList();
@@ -59,7 +62,7 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
     db.insert(_fridgeItemsTableName, {
       'id': item.id,
       'title': item.title,
-      'imagePath': item.image?.path,
+      'imagePath': item.image == null ? null : path.basename(item.image!.path),
       'expiryDate': item.expiryDate?.toIso8601String(),
     });
 

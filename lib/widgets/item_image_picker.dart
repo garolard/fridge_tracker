@@ -17,7 +17,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
 
   void pickImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.camera, maxHeight: 200);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera, maxHeight: 1200);
 
     if (pickedImage == null) {
       return;

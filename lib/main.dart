@@ -4,6 +4,7 @@ import 'package:fridge_tracker/screens/items_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
 }
 
