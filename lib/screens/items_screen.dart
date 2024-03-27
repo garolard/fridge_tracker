@@ -25,7 +25,8 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final items = ref.watch(filteredItemsProvider);
+    final items = ref.watch(itemsProvider);
+    final filteredItems = ref.watch(filteredItemsProvider);
 
     Widget body = items.isEmpty
         ? const Center(
@@ -36,37 +37,43 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
         : Column(
             children: [
               MainSearchBar(
-                allItems: items,
+                allItems: filteredItems,
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (ctx, index) {
-                    final item = items[index];
+                child: filteredItems.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No items found...',
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: filteredItems.length,
+                        itemBuilder: (ctx, index) {
+                          final item = filteredItems[index];
 
-                    return Dismissible(
-                      key: ValueKey(item.id),
-                      direction: DismissDirection.endToStart,
-                      onDismissed: (_) {
-                        ref.read(itemsProvider.notifier).removeItem(item);
-                      },
-                      background: Container(
-                        color: theme.colorScheme.error,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 4,
-                        ),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                          size: 28,
-                        ),
+                          return Dismissible(
+                            key: ValueKey(item.id),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (_) {
+                              ref.read(itemsProvider.notifier).removeItem(item);
+                            },
+                            background: Container(
+                              color: theme.colorScheme.error,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20),
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 4,
+                              ),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ),
+                            child: InventoryItem(item: item),
+                          );
+                        },
                       ),
-                      child: InventoryItem(item: item),
-                    );
-                  },
-                ),
               ),
             ],
           );
@@ -86,7 +93,18 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
           ),
         ],
       ),
-      body: body,
+      body: FutureBuilder(
+        future: loadItemsFuture,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
     );
   }
 }

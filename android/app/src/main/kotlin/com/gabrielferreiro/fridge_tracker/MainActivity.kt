@@ -1,4 +1,4 @@
-package com.example.fridge_tracker
+package com.gabrielferreiro.fridge_tracker
 
 import io.flutter.embedding.android.FlutterActivity
 
