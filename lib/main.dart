@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fridge_tracker/screens/items_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,6 +34,8 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       title: 'Fridge Tracker',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         colorScheme: colorScheme,
         textTheme: GoogleFonts.beVietnamProTextTheme(),

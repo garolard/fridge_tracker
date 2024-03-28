@@ -1,0 +1,24 @@
+{
+	"@@locale": "en",
+	"noItemsYet": "No items yet...",
+	"noItemsFound": "No items found...",
+	"fridgeInventory": "Fridge Inventory",
+	"addNewItem": "Add New Item",
+	"itemName": "Name",
+	"nameHint": "Enter a name",
+	"nameIsEmpty": "Please enter a name",
+	"daysUntilExpiry": "Days until expiry",
+	"daysUntilExpiryInvalidValue": "Please enter one or more days",
+	"save": "Save",
+	"delete": "Delete",
+	"searchForSomething": "Search for something...",
+	"addImage": "Add Image",
+	"expiryInDays": "expiry in {days} days",
+	"@expiyInDays": {
+		"placeholders": {
+			"days": {
+				"type": "int"
+			}
+		}
+	}
+}

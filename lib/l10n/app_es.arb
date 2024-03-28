@@ -1,0 +1,17 @@
+{
+	"@@locale": "es",
+	"noItemsYet": "No hay elementos aún...",
+	"noItemsFound": "No se encontraron elementos...",
+	"fridgeInventory": "Inventario de la nevera",
+	"addNewItem": "Añadir nuevo elemento",
+	"itemName": "Nombre",
+	"nameHint": "Introduce un nombre",
+	"nameIsEmpty": "Por favor introduce un nombre",
+	"daysUntilExpiry": "Días hasta que expire",
+	"daysUntilExpiryInvalidValue": "Por favor introduce uno o más días",
+	"save": "Guardar",
+	"delete": "Eliminar",
+	"searchForSomething": "Buscar algo...",
+	"addImage": "Añadir imagen",
+	"expiryInDays": "expira en {days} dias"
+}

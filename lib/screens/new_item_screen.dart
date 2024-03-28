@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
@@ -78,10 +79,11 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.background,
-        title: const Text('Add New Item'),
+        title: Text(l10n.addNewItem),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -106,7 +108,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                       ),
                 const SizedBox(height: 16),
                 Text(
-                  'Name',
+                  l10n.itemName,
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -126,7 +128,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                     ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      hintText: 'Enter name',
+                      hintText: l10n.nameHint,
                       border: InputBorder.none,
                       hintStyle: theme.textTheme.bodyLarge!.copyWith(
                         color: theme.colorScheme.onSurface,
@@ -134,7 +136,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a name';
+                        return l10n.nameIsEmpty;
                       }
                       return null;
                     },
@@ -145,7 +147,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Days until expiry',
+                  l10n.daysUntilExpiry,
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -177,7 +179,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                           value.isEmpty ||
                           int.tryParse(value) == null ||
                           int.parse(value) <= 0) {
-                        return 'Please enter one or more days';
+                        return l10n.daysUntilExpiryInvalidValue;
                       }
                       return null;
                     },
@@ -195,7 +197,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                         textStyle:
                             theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w600),
                       ),
-                      child: const Text('Save')),
+                      child: Text(l10n.save)),
                 ),
                 if (_isEditing)
                   SizedBox(
@@ -206,7 +208,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Delete',
+                        l10n.delete,
                         style: theme.textTheme.bodyMedium!.copyWith(
                           color: theme.colorScheme.error,
                           fontWeight: FontWeight.w600,

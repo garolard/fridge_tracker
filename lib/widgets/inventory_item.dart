@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fridge_tracker/models/item.dart';
 
 class InventoryItem extends StatelessWidget {
@@ -14,6 +15,7 @@ class InventoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return ListTile(
       onTap: () => onTapped(item),
@@ -22,7 +24,7 @@ class InventoryItem extends StatelessWidget {
         style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        'expiry in ${item.expiryDate!.difference(DateTime.now()).inDays} days',
+        l10n.expiryInDays(item.expiryDate!.difference(DateTime.now()).inDays),
         style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onSurface),
       ),
       trailing: item.image != null

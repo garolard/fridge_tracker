@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ItemImagePicker extends StatefulWidget {
@@ -33,6 +34,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     Widget content = pickedImage == null
         ? Column(
@@ -43,7 +45,7 @@ class _ItemImagePickerState extends State<ItemImagePicker> {
                 color: theme.colorScheme.onSurface,
               ),
               Text(
-                'Add Image',
+                l10n.addImage,
                 style: theme.textTheme.bodySmall!.copyWith(color: theme.colorScheme.onSurface),
               ),
             ],

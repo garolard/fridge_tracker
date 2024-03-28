@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
 import 'package:fridge_tracker/providers/search_provider.dart';
@@ -26,6 +27,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final items = ref.watch(itemsProvider);
     final filteredItems = ref.watch(filteredItemsProvider);
 
@@ -39,9 +41,9 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
     }
 
     Widget body = items.isEmpty
-        ? const Center(
+        ? Center(
             child: Text(
-              'No items yet...',
+              l10n.noItemsYet,
             ),
           )
         : Column(
@@ -51,9 +53,9 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
               ),
               Expanded(
                 child: filteredItems.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
-                          'No items found...',
+                          l10n.noItemsFound,
                         ),
                       )
                     : ListView.builder(
@@ -93,7 +95,7 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fridge Inventory'),
+        title: Text(l10n.fridgeInventory),
         backgroundColor: theme.colorScheme.background,
         actions: [
           IconButton(

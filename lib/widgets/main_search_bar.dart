@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/search_provider.dart';
@@ -24,6 +25,7 @@ class _MainSearchBarState extends ConsumerState<MainSearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -39,7 +41,7 @@ class _MainSearchBarState extends ConsumerState<MainSearchBar> {
             color: theme.colorScheme.onSurface,
           ),
           decoration: InputDecoration(
-            hintText: 'Search for something...',
+            hintText: l10n.searchForSomething,
             prefixIcon: const Icon(Icons.search),
             border: InputBorder.none,
             hintStyle: theme.textTheme.bodyMedium!.copyWith(
