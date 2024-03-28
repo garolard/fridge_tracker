@@ -5,15 +5,18 @@ class InventoryItem extends StatelessWidget {
   const InventoryItem({
     super.key,
     required this.item,
+    required this.onTapped,
   });
 
   final Item item;
+  final void Function(Item) onTapped;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ListTile(
+      onTap: () => onTapped(item),
       title: Text(
         item.title,
         style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),

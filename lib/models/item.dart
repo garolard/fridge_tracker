@@ -30,4 +30,18 @@ class Item {
   }) {
     isExpired = DateTime.now().isAfter(expiryDate!);
   }
+
+  Item copyWith({
+    String? title,
+    File? image,
+    int? daysUntilExpiry,
+  }) {
+    var newItem = Item(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      daysUntilExpiry: daysUntilExpiry ?? this.daysUntilExpiry,
+    );
+    newItem.id = id;
+    return newItem;
+  }
 }

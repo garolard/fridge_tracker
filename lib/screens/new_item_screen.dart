@@ -8,7 +8,9 @@ import 'package:fridge_tracker/providers/items_provider.dart';
 import 'package:fridge_tracker/widgets/item_image_picker.dart';
 
 class NewItemScreen extends ConsumerStatefulWidget {
-  const NewItemScreen({super.key});
+  const NewItemScreen({super.key, this.editingItem});
+
+  final Item? editingItem;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NewItemScreenState();
@@ -16,9 +18,20 @@ class NewItemScreen extends ConsumerStatefulWidget {
 
 class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   final _formKey = GlobalKey<FormState>();
+  var _isEditing = false;
   File? _pickedImage;
   var _pickedName = '';
   var _pickedDaysUntilExpiry = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editingItem != null) {
+      _pickedName = widget.editingItem!.title;
+      _pickedImage = widget.editingItem!.image;
+      _isEditing = true;
+    }
+  }
 
   void onImagePicked(File? pickedImage) {
     _pickedImage = pickedImage;
@@ -43,6 +56,25 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
     Navigator.of(context).pop();
   }
 
+  void updateItem() {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+
+    final items = ref.read(itemsProvider.notifier);
+    final updatedItem = widget.editingItem!.copyWith(
+      title: _pickedName,
+      daysUntilExpiry: _pickedDaysUntilExpiry,
+      image: _pickedImage,
+    );
+    items.updateItem(updatedItem);
+
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -59,10 +91,19 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image picker
-                ItemImagePicker(
-                  onImagePicked: onImagePicked,
-                ),
+                _isEditing && _pickedImage != null
+                    ? ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                        child: Image.file(
+                          _pickedImage!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 200,
+                        ),
+                      )
+                    : ItemImagePicker(
+                        onImagePicked: onImagePicked,
+                      ),
                 const SizedBox(height: 16),
                 Text(
                   'Name',
@@ -77,6 +118,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                     color: theme.colorScheme.surface,
                   ),
                   child: TextFormField(
+                    initialValue: _pickedName,
                     enableSuggestions: false,
                     autocorrect: false,
                     style: theme.textTheme.bodyMedium!.copyWith(
@@ -115,6 +157,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                     color: theme.colorScheme.surface,
                   ),
                   child: TextFormField(
+                    initialValue: _pickedDaysUntilExpiry.toString(),
                     keyboardType: TextInputType.number,
                     enableSuggestions: false,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -147,13 +190,30 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: saveItem,
+                      onPressed: _isEditing ? updateItem : saveItem,
                       style: ElevatedButton.styleFrom(
                         textStyle:
                             theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w600),
                       ),
                       child: const Text('Save')),
                 ),
+                if (_isEditing)
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () {
+                        ref.read(itemsProvider.notifier).removeItem(widget.editingItem!);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Delete',
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: theme.colorScheme.error,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
 import 'package:fridge_tracker/providers/search_provider.dart';
 import 'package:fridge_tracker/screens/new_item_screen.dart';
@@ -27,6 +28,15 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
     final theme = Theme.of(context);
     final items = ref.watch(itemsProvider);
     final filteredItems = ref.watch(filteredItemsProvider);
+
+    void addNewItem() {
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const NewItemScreen()));
+    }
+
+    void editItem(Item item) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => NewItemScreen(editingItem: item)));
+    }
 
     Widget body = items.isEmpty
         ? const Center(
@@ -70,17 +80,16 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
                                 size: 28,
                               ),
                             ),
-                            child: InventoryItem(item: item),
+                            child: InventoryItem(
+                              item: item,
+                              onTapped: editItem,
+                            ),
                           );
                         },
                       ),
               ),
             ],
           );
-
-    void addNewItem() {
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const NewItemScreen()));
-    }
 
     return Scaffold(
       appBar: AppBar(

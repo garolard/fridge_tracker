@@ -86,6 +86,21 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
         .toList()
         .sorted<Item, DateTime>((x) => x.expiryDate!);
   }
+
+  void updateItem(Item item) async {
+    final db = await _getDatabase();
+    db.update(
+      _fridgeItemsTableName,
+      {
+        'title': item.title,
+        'expiryDate': item.expiryDate?.toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [item.id],
+    );
+
+    await loadItems();
+  }
 }
 
 final itemsProvider = StateNotifierProvider<ItemsProviderNotifier, List<Item>>((ref) {
