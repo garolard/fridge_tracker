@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fridge_tracker/screens/items_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final notificationsPlugin = FlutterLocalNotificationsPlugin();
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initializationSettings = InitializationSettings(android: androidSettings);
+
+  await notificationsPlugin.initialize(initializationSettings);
+
   runApp(
     const ProviderScope(
       child: MyApp(),
