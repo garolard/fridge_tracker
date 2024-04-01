@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
-  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const androidSettings = AndroidInitializationSettings('ic_stat_app_icon');
   const initializationSettings = InitializationSettings(android: androidSettings);
 
   await notificationsPlugin.initialize(initializationSettings);
