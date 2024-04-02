@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:fridge_tracker/screens/items_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
+  final timezone = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timezone));
 
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
   const androidSettings = AndroidInitializationSettings('ic_stat_app_icon');
@@ -60,7 +67,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const MealsScreen(),
+      home: const ItemsScreen(),
     );
   }
 }

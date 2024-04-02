@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fridge_tracker/factories/notifications_service.dart';
 import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
 import 'package:fridge_tracker/providers/search_provider.dart';
@@ -9,26 +10,23 @@ import 'package:fridge_tracker/screens/new_item_screen.dart';
 import 'package:fridge_tracker/widgets/inventory_item.dart';
 import 'package:fridge_tracker/widgets/main_search_bar.dart';
 
-final _notifications = FlutterLocalNotificationsPlugin();
+final _notifications = NotificationsService();
 
-class MealsScreen extends ConsumerStatefulWidget {
-  const MealsScreen({super.key});
+class ItemsScreen extends ConsumerStatefulWidget {
+  const ItemsScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MealsScreenState();
 }
 
-class _MealsScreenState extends ConsumerState<MealsScreen> {
+class _MealsScreenState extends ConsumerState<ItemsScreen> {
   late Future<void> loadItemsFuture;
   var _notificationsEnabled = false;
 
   void _requestPermissions() async {
-    final grantedNotificationPermissions = await _notifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
-
+    final permissionsEnabled = await _notifications.requestPermission();
     setState(() {
-      _notificationsEnabled = grantedNotificationPermissions ?? false;
+      _notificationsEnabled = permissionsEnabled;
     });
   }
 
@@ -120,18 +118,10 @@ class _MealsScreenState extends ConsumerState<MealsScreen> {
           IconButton(
             icon: const Icon(Icons.cloud),
             onPressed: () async {
-              if (!_notificationsEnabled) {
-                return;
+              if (_notificationsEnabled) {
+                _notifications.scheduleNotification(
+                    'Prueba', const Duration(seconds: 30), 'Service test');
               }
-
-              const droidNotificationDetails = AndroidNotificationDetails(
-                'fridgeId',
-                'generalNotification',
-                importance: Importance.max,
-                priority: Priority.high,
-              );
-              const notificationDetails = NotificationDetails(android: droidNotificationDetails);
-              await _notifications.show(0, 'Prueba', 'Dale papi', notificationDetails);
             },
           ),
         ],
