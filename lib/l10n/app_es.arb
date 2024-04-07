@@ -14,5 +14,5 @@
 	"searchForSomething": "Buscar algo...",
 	"addImage": "Añadir imagen",
 	"expiryInDays": "expira en {days} dias",
-	"itemExpiresToday_notification": "{name} expira hoy"
+	"itemExpiresSoon_notification": "{name} va a expirar pronto"
 }

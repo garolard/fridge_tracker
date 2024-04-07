@@ -65,7 +65,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
         newItem.notificationId,
         newItem.title,
         const Duration(seconds: 30),
-        l10n.itemExpiresToday_notification(newItem.title),
+        l10n.itemExpiresSoon_notification(newItem.title),
         newItem.image,
       );
     }
