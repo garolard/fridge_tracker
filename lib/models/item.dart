@@ -9,7 +9,7 @@ class Item {
   File? image;
   int? daysUntilExpiry;
   DateTime? expiryDate;
-  bool isExpired = false;
+  int notificationId = 0;
 
   Item({
     required this.title,
@@ -18,18 +18,15 @@ class Item {
   })  : id = _uuid.v8(),
         expiryDate = DateTime.now().add(
           Duration(days: daysUntilExpiry!),
-        ) {
-    isExpired = false;
-  }
+        );
 
   Item.existing({
     required this.id,
     required this.title,
     required this.image,
     required this.expiryDate,
-  }) {
-    isExpired = DateTime.now().isAfter(expiryDate!);
-  }
+    required this.notificationId,
+  });
 
   Item copyWith({
     String? title,
@@ -42,6 +39,7 @@ class Item {
       daysUntilExpiry: daysUntilExpiry ?? this.daysUntilExpiry,
     );
     newItem.id = id;
+    newItem.notificationId = notificationId;
     return newItem;
   }
 }

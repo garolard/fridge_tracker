@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fridge_tracker/factories/notifications_service.dart';
 import 'package:fridge_tracker/models/item.dart';
 import 'package:fridge_tracker/providers/items_provider.dart';
 import 'package:fridge_tracker/widgets/item_image_picker.dart';
+
+final _notifications = NotificationsService();
 
 class NewItemScreen extends ConsumerStatefulWidget {
   const NewItemScreen({super.key, this.editingItem});
@@ -18,6 +21,8 @@ class NewItemScreen extends ConsumerStatefulWidget {
 }
 
 class _NewItemScreenState extends ConsumerState<NewItemScreen> {
+  late AppLocalizations l10n;
+
   final _formKey = GlobalKey<FormState>();
   var _isEditing = false;
   File? _pickedImage;
@@ -38,7 +43,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
     _pickedImage = pickedImage;
   }
 
-  void saveItem() {
+  Future<void> saveItem() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -52,8 +57,20 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
       daysUntilExpiry: _pickedDaysUntilExpiry,
       image: _pickedImage,
     );
+    newItem.notificationId = _pickedName.hashCode;
     items.addItem(newItem);
 
+    if (await _notifications.requestPermission()) {
+      _notifications.scheduleNotification(
+        newItem.notificationId,
+        newItem.title,
+        const Duration(seconds: 30),
+        l10n.itemExpiresToday_notification(newItem.title),
+        newItem.image,
+      );
+    }
+
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
@@ -79,7 +96,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
+    l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.background,

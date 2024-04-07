@@ -20,5 +20,13 @@
 				"type": "int"
 			}
 		}
+	},
+	"itemExpiresToday_notification": "{name} expires today",
+	"@itemExpiresToday_notification": {
+		"placeholders": {
+			"name": {
+				"type": "String"
+			}
+		}
 	}
 }

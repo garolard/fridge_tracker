@@ -18,7 +18,7 @@ Future<sqlite.Database> _getDatabase() async {
     path.join(dbPath.path, 'fridge_items.db'),
     onCreate: (db, version) {
       return db.execute(
-        'CREATE TABLE $_fridgeItemsTableName(id TEXT PRIMARY KEY, title TEXT, imagePath TEXT, expiryDate TEXT)',
+        'CREATE TABLE $_fridgeItemsTableName(id TEXT PRIMARY KEY, title TEXT, imagePath TEXT, expiryDate TEXT, notificationId INTEGER)',
       );
     },
     version: 1,
@@ -43,6 +43,7 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
                   ? File(path.join('${appDir.path}/${itemData['imagePath'] as String}'))
                   : null,
               expiryDate: DateTime.parse(itemData['expiryDate'] as String),
+              notificationId: itemData['notificationId'] as int,
             ))
         .toList();
 
@@ -64,6 +65,7 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
       'title': item.title,
       'imagePath': item.image == null ? null : path.basename(item.image!.path),
       'expiryDate': item.expiryDate?.toIso8601String(),
+      'notificationId': item.notificationId,
     });
 
     state = [...state, item].sorted<Item, DateTime>((x) => x.expiryDate!);

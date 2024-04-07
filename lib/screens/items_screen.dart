@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fridge_tracker/factories/notifications_service.dart';
@@ -76,11 +75,15 @@ class _MealsScreenState extends ConsumerState<ItemsScreen> {
                         itemBuilder: (ctx, index) {
                           final item = filteredItems[index];
 
+                          // TODO: Extract this to a separate widget
                           return Dismissible(
                             key: ValueKey(item.id),
                             direction: DismissDirection.endToStart,
                             onDismissed: (_) {
                               ref.read(itemsProvider.notifier).removeItem(item);
+                              if (_notificationsEnabled) {
+                                _notifications.cancelNotification(item.notificationId);
+                              }
                             },
                             background: Container(
                               color: theme.colorScheme.error,
@@ -114,15 +117,6 @@ class _MealsScreenState extends ConsumerState<ItemsScreen> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: addNewItem,
-          ),
-          IconButton(
-            icon: const Icon(Icons.cloud),
-            onPressed: () async {
-              if (_notificationsEnabled) {
-                _notifications.scheduleNotification(
-                    'Prueba', const Duration(seconds: 30), 'Service test');
-              }
-            },
           ),
         ],
       ),

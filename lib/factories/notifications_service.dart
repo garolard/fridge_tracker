@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:uuid/uuid.dart';
@@ -33,18 +35,32 @@ class NotificationsService {
     await _notifications.show(_uuid.v4().hashCode, title, message, notificationDetails);
   }
 
-  void scheduleNotification(String title, Duration fromNowTo, String? message) async {
-    final id = _uuid.v1();
-    const androidNotificationDetails = AndroidNotificationDetails(channelId, channelName,
-        priority: Priority.max, importance: Importance.max);
-    const notificationDetails = NotificationDetails(android: androidNotificationDetails);
+  void scheduleNotification(
+      int id, String title, Duration fromNowTo, String? message, File? notificationImage) async {
+    final notificationStyleInformation = notificationImage != null
+        ? const MediaStyleInformation()
+        : const DefaultStyleInformation(false, false);
+
+    final androidNotificationDetails = AndroidNotificationDetails(
+      channelId,
+      channelName,
+      importance: Importance.max,
+      largeIcon: notificationImage != null ? FilePathAndroidBitmap(notificationImage.path) : null,
+      styleInformation: notificationStyleInformation,
+    );
+    final notificationDetails = NotificationDetails(android: androidNotificationDetails);
+
     await _notifications.zonedSchedule(
-      id.hashCode,
+      id,
       title,
       message,
       tz.TZDateTime.now(tz.local).add(fromNowTo),
       notificationDetails,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
+  }
+
+  void cancelNotification(int id) {
+    _notifications.cancel(id);
   }
 }

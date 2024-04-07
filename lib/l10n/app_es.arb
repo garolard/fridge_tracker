@@ -13,5 +13,6 @@
 	"delete": "Eliminar",
 	"searchForSomething": "Buscar algo...",
 	"addImage": "Añadir imagen",
-	"expiryInDays": "expira en {days} dias"
+	"expiryInDays": "expira en {days} dias",
+	"itemExpiresToday_notification": "{name} expira hoy"
 }
