@@ -27,7 +27,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   var _isEditing = false;
   File? _pickedImage;
   var _pickedName = '';
-  var _pickedDaysUntilExpiry = 0;
+  var _pickedDaysUntilExpiry = 1;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
       _notifications.scheduleNotification(
         newItem.notificationId,
         newItem.title,
-        const Duration(seconds: 30),
+        Duration(hours: newItem.expiryDate!.subtract(const Duration(days: 1)).hour),
         l10n.itemExpiresSoon_notification(newItem.title),
         newItem.image,
       );
@@ -195,7 +195,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                       if (value == null ||
                           value.isEmpty ||
                           int.tryParse(value) == null ||
-                          int.parse(value) <= 0) {
+                          int.parse(value) < 1) {
                         return l10n.daysUntilExpiryInvalidValue;
                       }
                       return null;
