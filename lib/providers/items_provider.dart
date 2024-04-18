@@ -52,10 +52,7 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
 
   void addItem(Item item) async {
     if (item.image != null) {
-      final appDir = await syspath.getApplicationDocumentsDirectory();
-      final fileName = path.basename(item.image!.path);
-      final copiedImage = await item.image!.copy('${appDir.path}/$fileName');
-      item.image = copiedImage;
+      item.image = await _saveItemImageToFile(item.image!);
     }
 
     final db = await _getDatabase();
@@ -90,19 +87,30 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
   }
 
   void updateItem(Item item) async {
+    if (item.image != null) {
+      item.image = await _saveItemImageToFile(item.image!);
+    }
+
     final db = await _getDatabase();
     db.update(
       _fridgeItemsTableName,
       {
         'title': item.title,
         'imagePath': item.image == null ? null : path.basename(item.image!.path),
-        'expiryDate': item.expiryDate?.toIso8601String(),
+        'expiryDate': item.expiryDate.toIso8601String(),
       },
       where: 'id = ?',
       whereArgs: [item.id],
     );
 
     await loadItems();
+  }
+
+  Future<File> _saveItemImageToFile(File imageFile) async {
+    final appDir = await syspath.getApplicationDocumentsDirectory();
+    final fileName = path.basename(imageFile.path);
+    final copiedImage = await imageFile.copy('${appDir.path}/$fileName');
+    return copiedImage;
   }
 }
 
