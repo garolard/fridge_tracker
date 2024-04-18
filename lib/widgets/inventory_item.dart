@@ -28,7 +28,7 @@ class InventoryItem extends StatelessWidget {
       ),
       subtitle: Text(
         !item.isExpired
-            ? l10n.expiryInDays(item.expiryDate.difference(DateTime.now()).inDays)
+            ? l10n.expiryInDays(item.expiryDate.difference(DateTime.now()).inDays + 1)
             : l10n.expired,
         style: itemSubtitleTextStyle,
       ),

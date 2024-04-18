@@ -43,5 +43,5 @@ class Item {
     return newItem;
   }
 
-  bool get isExpired => expiryDate.difference(DateTime.now()).inDays <= 0;
+  bool get isExpired => expiryDate.difference(DateTime.now()).inDays < 0;
 }
