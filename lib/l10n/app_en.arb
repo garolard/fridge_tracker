@@ -21,6 +21,7 @@
 			}
 		}
 	},
+	"expired": "expired",
 	"itemExpiresSoon_notification": "{name} will expire soon",
 	"@itemExpiresSoon_notification": {
 		"placeholders": {

@@ -8,7 +8,7 @@ class Item {
   String title;
   File? image;
   int? daysUntilExpiry;
-  DateTime? expiryDate;
+  DateTime expiryDate;
   int notificationId = 0;
 
   Item({
@@ -42,4 +42,6 @@ class Item {
     newItem.notificationId = notificationId;
     return newItem;
   }
+
+  bool get isExpired => expiryDate.difference(DateTime.now()).inDays <= 0;
 }

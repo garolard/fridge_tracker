@@ -17,6 +17,9 @@ class InventoryItem extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    final itemSubtitleTextStyle = theme.textTheme.bodyMedium!
+        .copyWith(color: item.isExpired ? theme.colorScheme.error : theme.colorScheme.onSurface);
+
     return ListTile(
       onTap: () => onTapped(item),
       title: Text(
@@ -24,8 +27,10 @@ class InventoryItem extends StatelessWidget {
         style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        l10n.expiryInDays(item.expiryDate!.difference(DateTime.now()).inDays),
-        style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onSurface),
+        !item.isExpired
+            ? l10n.expiryInDays(item.expiryDate.difference(DateTime.now()).inDays)
+            : l10n.expired,
+        style: itemSubtitleTextStyle,
       ),
       trailing: item.image != null
           ? ClipRRect(
