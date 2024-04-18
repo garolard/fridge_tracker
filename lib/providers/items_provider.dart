@@ -95,6 +95,7 @@ class ItemsProviderNotifier extends StateNotifier<List<Item>> {
       _fridgeItemsTableName,
       {
         'title': item.title,
+        'imagePath': item.image == null ? null : path.basename(item.image!.path),
         'expiryDate': item.expiryDate?.toIso8601String(),
       },
       where: 'id = ?',
