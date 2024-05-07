@@ -45,6 +45,8 @@ class NotificationsService {
       channelId,
       channelName,
       importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
       largeIcon: notificationImage != null ? FilePathAndroidBitmap(notificationImage.path) : null,
       styleInformation: notificationStyleInformation,
     );
