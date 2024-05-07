@@ -47,11 +47,6 @@ class _MealsScreenState extends ConsumerState<ItemsScreen> {
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const NewItemScreen()));
     }
 
-    void editItem(Item item) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => NewItemScreen(editingItem: item)));
-    }
-
     Widget body = items.isEmpty
         ? Center(
             child: Text(
@@ -75,33 +70,9 @@ class _MealsScreenState extends ConsumerState<ItemsScreen> {
                         itemBuilder: (ctx, index) {
                           final item = filteredItems[index];
 
-                          // TODO: Extract this to a separate widget
-                          return Dismissible(
-                            key: ValueKey(item.id),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (_) {
-                              ref.read(itemsProvider.notifier).removeItem(item);
-                              if (_notificationsEnabled) {
-                                _notifications.cancelNotification(item.notificationId);
-                              }
-                            },
-                            background: Container(
-                              color: theme.colorScheme.error,
-                              alignment: Alignment.centerRight,
-                              padding: const EdgeInsets.only(right: 20),
-                              margin: const EdgeInsets.symmetric(
-                                vertical: 4,
-                              ),
-                              child: const Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                            child: InventoryItem(
-                              item: item,
-                              onTapped: editItem,
-                            ),
+                          return InventoryItem(
+                            item: item,
+                            notificationsEnabled: _notificationsEnabled,
                           );
                         },
                       ),

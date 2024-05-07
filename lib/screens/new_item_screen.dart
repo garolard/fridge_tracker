@@ -111,13 +111,16 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _isEditing && _pickedImage != null
-                    ? ClipRRect(
-                        borderRadius: const BorderRadius.all(Radius.circular(12)),
-                        child: Image.file(
-                          _pickedImage!,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 200,
+                    ? Hero(
+                        tag: _pickedImage!,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          child: Image.file(
+                            _pickedImage!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 200,
+                          ),
                         ),
                       )
                     : ItemImagePicker(
