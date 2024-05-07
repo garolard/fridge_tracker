@@ -4,6 +4,7 @@
 # Config and IDE related
 .vscode
 .idea
+*.symbols
 
 
 ### Flutter ###
