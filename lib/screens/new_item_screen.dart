@@ -24,6 +24,7 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   late AppLocalizations l10n;
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _daysInputController = TextEditingController(text: '1');
   var _isEditing = false;
   File? _pickedImage;
   var _pickedName = '';
@@ -35,6 +36,8 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
     if (widget.editingItem != null) {
       _pickedName = widget.editingItem!.title;
       _pickedImage = widget.editingItem!.image;
+      _pickedDaysUntilExpiry = widget.editingItem!.daysUntilExpiry!;
+      _daysInputController.text = _pickedDaysUntilExpiry.toString();
       _isEditing = true;
     }
   }
@@ -97,10 +100,11 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.background,
-        title: Text(l10n.addNewItem),
+        title: Text(_isEditing ? _pickedName : l10n.addNewItem),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -179,12 +183,16 @@ class _NewItemScreenState extends ConsumerState<NewItemScreen> {
                     color: theme.colorScheme.surface,
                   ),
                   child: TextFormField(
-                    initialValue: _pickedDaysUntilExpiry.toString(),
+                    controller: _daysInputController,
                     keyboardType: TextInputType.number,
                     enableSuggestions: false,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     style: theme.textTheme.bodyMedium!.copyWith(
                       color: theme.colorScheme.onSurface,
+                    ),
+                    onTap: () => _daysInputController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _daysInputController.value.text.length,
                     ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),

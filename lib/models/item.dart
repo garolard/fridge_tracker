@@ -25,6 +25,7 @@ class Item {
     required this.title,
     required this.image,
     required this.expiryDate,
+    required this.daysUntilExpiry,
     required this.notificationId,
   });
 
